@@ -47,7 +47,7 @@ function getErrorMessage(error: unknown): string {
  * 解析 externalId 获取 provider、type 和请求信息
  */
 export function parseExternalId(externalId: string): {
-    provider: 'FAL' | 'ARK' | 'GEMINI' | 'GOOGLE' | 'MINIMAX' | 'VIDU' | 'OPENAI' | 'OCOMPAT' | 'BAILIAN' | 'SILICONFLOW' | 'UNKNOWN'
+    provider: 'FAL' | 'ARK' | 'GEMINI' | 'GOOGLE' | 'MINIMAX' | 'VIDU' | 'OPENAI' | 'OCOMPAT' | 'BAILIAN' | 'SILICONFLOW' | 'EVOLINK' | 'UNKNOWN'
     type: 'VIDEO' | 'IMAGE' | 'BATCH' | 'UNKNOWN'
     endpoint?: string
     requestId: string
@@ -209,9 +209,23 @@ export function parseExternalId(externalId: string): {
         }
     }
 
+    if (externalId.startsWith('EVOLINK:')) {
+        const parts = externalId.split(':')
+        const type = parts[1]
+        const requestId = parts.slice(2).join(':')
+        if ((type !== 'VIDEO' && type !== 'IMAGE') || !requestId) {
+            throw new Error(`无效 EVOLINK externalId: "${externalId}"，应为 EVOLINK:TYPE:requestId`)
+        }
+        return {
+            provider: 'EVOLINK',
+            type: type as 'VIDEO' | 'IMAGE',
+            requestId,
+        }
+    }
+
     throw new Error(
         `无法识别的 externalId 格式: "${externalId}". ` +
-        `支持的格式: FAL:TYPE:endpoint:requestId, ARK:TYPE:requestId, GEMINI:BATCH:batchName, GOOGLE:VIDEO:operationName, MINIMAX:TYPE:taskId, VIDU:TYPE:taskId, OPENAI:VIDEO:providerToken:videoId, OCOMPAT:TYPE:providerToken:modelKeyToken:taskId, BAILIAN:TYPE:requestId, SILICONFLOW:TYPE:requestId`
+        `支持的格式: FAL:TYPE:endpoint:requestId, ARK:TYPE:requestId, GEMINI:BATCH:batchName, GOOGLE:VIDEO:operationName, MINIMAX:TYPE:taskId, VIDU:TYPE:taskId, OPENAI:VIDEO:providerToken:videoId, OCOMPAT:TYPE:providerToken:modelKeyToken:taskId, BAILIAN:TYPE:requestId, SILICONFLOW:TYPE:requestId, EVOLINK:TYPE:requestId`
     )
 }
 
@@ -251,6 +265,8 @@ export async function pollAsyncTask(
             return await pollBailianTask(parsed.requestId, userId)
         case 'SILICONFLOW':
             return await pollSiliconFlowTask(parsed.requestId)
+        case 'EVOLINK':
+            return await pollEvolinkTask(parsed.requestId, userId, parsed.type)
         default:
             // 🔥 移除 fallback：未知 provider 直接抛出错误
             throw new Error(`未知的 Provider: ${parsed.provider}`)
@@ -857,6 +873,74 @@ async function pollSiliconFlowTask(requestId: string): Promise<PollResult> {
     }
 }
 
+async function pollEvolinkTask(taskId: string, userId: string, type: 'VIDEO' | 'IMAGE' | 'BATCH' | 'UNKNOWN' = 'IMAGE'): Promise<PollResult> {
+    const logPrefix = '[EvoLink Query]'
+
+    try {
+        const { apiKey } = await getProviderConfig(userId, 'evolink')
+        const response = await fetch(
+            `https://api.evolink.ai/v1/tasks/${encodeURIComponent(taskId)}`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                },
+            },
+        )
+
+        if (!response.ok) {
+            const errorText = await response.text().catch(() => '')
+            _ulogError(`${logPrefix} 查询失败: ${response.status} ${errorText.slice(0, 200)}`)
+            return {
+                status: 'failed',
+                error: `EvoLink: 查询失败 ${response.status}`,
+            }
+        }
+
+        const data = await response.json() as {
+            status?: string
+            results?: string[]
+            error?: { code?: string; message?: string }
+        }
+        const status = typeof data.status === 'string' ? data.status.trim().toLowerCase() : ''
+
+        if (status === 'completed') {
+            const resultUrl = Array.isArray(data.results) && typeof data.results[0] === 'string'
+                ? data.results[0].trim()
+                : ''
+            if (!resultUrl) {
+                return {
+                    status: 'failed',
+                    error: `EvoLink: 任务完成但未返回结果 URL`,
+                }
+            }
+            _ulogInfo(`${logPrefix} task_id=${taskId} 完成`)
+            return {
+                status: 'completed',
+                resultUrl,
+                ...(type === 'VIDEO' ? { videoUrl: resultUrl } : { imageUrl: resultUrl }),
+            }
+        }
+
+        if (status === 'failed') {
+            const errorMsg = data.error?.message || data.error?.code || '任务失败'
+            _ulogError(`${logPrefix} task_id=${taskId} 失败: ${errorMsg}`)
+            return {
+                status: 'failed',
+                error: `EvoLink: ${errorMsg}`,
+            }
+        }
+
+        return { status: 'pending' }
+    } catch (error: unknown) {
+        const errorMessage = getErrorMessage(error)
+        _ulogError(`${logPrefix} task_id=${taskId} 异常:`, error)
+        return {
+            status: 'failed',
+            error: `EvoLink: ${errorMessage}`,
+        }
+    }
+}
+
 /**
  * 查询 Vidu 任务状态
  */
@@ -948,7 +1032,7 @@ async function queryViduTaskStatus(
  * 创建标准格式的 externalId
  */
 export function formatExternalId(
-    provider: 'FAL' | 'ARK' | 'GEMINI' | 'GOOGLE' | 'MINIMAX' | 'VIDU' | 'OPENAI' | 'OCOMPAT' | 'BAILIAN' | 'SILICONFLOW',
+    provider: 'FAL' | 'ARK' | 'GEMINI' | 'GOOGLE' | 'MINIMAX' | 'VIDU' | 'OPENAI' | 'OCOMPAT' | 'BAILIAN' | 'SILICONFLOW' | 'EVOLINK',
     type: 'VIDEO' | 'IMAGE' | 'BATCH',
     requestId: string,
     endpoint?: string,

@@ -167,6 +167,25 @@ export const PRESET_MODELS: PresetModel[] = [
     { modelId: 'vidu-lipsync', name: 'Vidu Lip Sync', type: 'lipsync', provider: 'vidu' },
     { modelId: 'videoretalk', name: 'VideoRetalk Lip Sync', type: 'lipsync', provider: 'bailian' },
 
+    // EvoLink 文本模型
+    { modelId: 'gemini-3.1-pro-preview', name: 'Gemini 3.1 Pro', type: 'llm', provider: 'evolink' },
+    { modelId: 'gpt-5.4', name: 'GPT-5.4', type: 'llm', provider: 'evolink' },
+    { modelId: 'gemini-3.1-flash-lite-preview', name: 'Gemini 3.1 Flash Lite', type: 'llm', provider: 'evolink' },
+    { modelId: 'gemini-3.0-flash-preview', name: 'Gemini 3.0 Flash', type: 'llm', provider: 'evolink' },
+    { modelId: 'claude-opus-4-6', name: 'Claude Opus 4.6', type: 'llm', provider: 'evolink' },
+    { modelId: 'claude-sonnet-4-6', name: 'Claude Sonnet 4.6', type: 'llm', provider: 'evolink' },
+    // EvoLink 图像模型
+    { modelId: 'gemini-3.1-flash-image-preview', name: 'NanoBanana 2', type: 'image', provider: 'evolink' },
+    { modelId: 'gemini-3-pro-image-preview', name: 'NanoBanana Pro', type: 'image', provider: 'evolink' },
+    { modelId: 'seedream-5.0-lite', name: 'Seedream 5.0 Lite', type: 'image', provider: 'evolink' },
+    { modelId: 'z-image-turbo', name: 'Z-Image-Turbo', type: 'image', provider: 'evolink' },
+    // EvoLink 视频模型
+    { modelId: 'kling-o3-image-to-video', name: 'Kling O3', type: 'video', provider: 'evolink' },
+    { modelId: 'kling-v3-image-to-video', name: 'Kling V3', type: 'video', provider: 'evolink' },
+    { modelId: 'wan2.6-image-to-video', name: 'Wan 2.6 I2V', type: 'video', provider: 'evolink' },
+    { modelId: 'wan2.6-image-to-video-flash', name: 'Wan 2.6 I2V Flash', type: 'video', provider: 'evolink' },
+    { modelId: 'seedance-1.5-pro', name: 'Seedance 1.5 Pro', type: 'video', provider: 'evolink' },
+
     // MiniMax 视频模型
     { modelId: 'minimax-hailuo-2.3', name: 'Hailuo 2.3', type: 'video', provider: 'minimax' },
     { modelId: 'minimax-hailuo-2.3-fast', name: 'Hailuo 2.3 Fast', type: 'video', provider: 'minimax' },
@@ -205,6 +224,7 @@ export const PRESET_PROVIDERS: Omit<Provider, 'apiKey' | 'hasApiKey'>[] = [
     { id: 'minimax', name: 'MiniMax Hailuo', baseUrl: 'https://api.minimaxi.com/v1' },
     { id: 'vidu', name: 'Vidu' },
     { id: 'fal', name: 'FAL' },
+    { id: 'evolink', name: 'EvoLink', baseUrl: 'https://api.evolink.ai/v1' },
 ]
 
 const ZH_PROVIDER_NAME_MAP: Record<string, string> = {
@@ -213,6 +233,7 @@ const ZH_PROVIDER_NAME_MAP: Record<string, string> = {
     vidu: '生数科技 Vidu',
     bailian: '阿里云百炼',
     siliconflow: '硅基流动',
+    evolink: 'EvoLink',
 }
 
 function isZhLocale(locale?: string): boolean {
@@ -369,6 +390,15 @@ export const PROVIDER_TUTORIALS: ProviderTutorial[] = [
         steps: [
             {
                 text: 'openai_compatible_step1'
+            }
+        ]
+    },
+    {
+        providerId: 'evolink',
+        steps: [
+            {
+                text: 'evolink_step1',
+                url: 'https://evolink.ai/dashboard/keys'
             }
         ]
     },

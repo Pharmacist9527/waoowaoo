@@ -6019,5 +6019,192 @@
       "mode": "flat",
       "flatAmount": 0.5
     }
+  },
+  {
+    "apiType": "text",
+    "provider": "evolink",
+    "modelId": "gemini-3.1-pro-preview",
+    "pricing": {
+      "mode": "capability",
+      "tiers": [
+        { "when": { "tokenType": "input" }, "amount": 11.6 },
+        { "when": { "tokenType": "output" }, "amount": 69.2 }
+      ]
+    }
+  },
+  {
+    "apiType": "text",
+    "provider": "evolink",
+    "modelId": "gpt-5.4",
+    "pricing": {
+      "mode": "capability",
+      "tiers": [
+        { "when": { "tokenType": "input" }, "amount": 14.4 },
+        { "when": { "tokenType": "output" }, "amount": 86.4 }
+      ]
+    }
+  },
+  {
+    "apiType": "text",
+    "provider": "evolink",
+    "modelId": "gemini-3.1-flash-lite-preview",
+    "pricing": {
+      "mode": "capability",
+      "tiers": [
+        { "when": { "tokenType": "input" }, "amount": 1.5 },
+        { "when": { "tokenType": "output" }, "amount": 8.64 }
+      ]
+    }
+  },
+  {
+    "apiType": "text",
+    "provider": "evolink",
+    "modelId": "gemini-3.0-flash-preview",
+    "pricing": {
+      "mode": "capability",
+      "tiers": [
+        { "when": { "tokenType": "input" }, "amount": 2.9 },
+        { "when": { "tokenType": "output" }, "amount": 17.3 }
+      ]
+    }
+  },
+  {
+    "apiType": "text",
+    "provider": "evolink",
+    "modelId": "claude-opus-4-6",
+    "pricing": {
+      "mode": "capability",
+      "tiers": [
+        { "when": { "tokenType": "input" }, "amount": 29.8 },
+        { "when": { "tokenType": "output" }, "amount": 153 }
+      ]
+    }
+  },
+  {
+    "apiType": "text",
+    "provider": "evolink",
+    "modelId": "claude-sonnet-4-6",
+    "pricing": {
+      "mode": "capability",
+      "tiers": [
+        { "when": { "tokenType": "input" }, "amount": 18.4 },
+        { "when": { "tokenType": "output" }, "amount": 91.8 }
+      ]
+    }
+  },
+  {
+    "apiType": "image",
+    "provider": "evolink",
+    "modelId": "z-image-turbo",
+    "pricing": {
+      "mode": "flat",
+      "flatAmount": 0.026
+    }
+  },
+  {
+    "apiType": "image",
+    "provider": "evolink",
+    "modelId": "seedream-5.0-lite",
+    "pricing": {
+      "mode": "flat",
+      "flatAmount": 0.22
+    }
+  },
+  {
+    "apiType": "image",
+    "provider": "evolink",
+    "modelId": "gemini-3.1-flash-image-preview",
+    "pricing": {
+      "mode": "capability",
+      "tiers": [
+        { "when": { "resolution": "0.5K" }, "amount": 0.26 },
+        { "when": { "resolution": "1K" }, "amount": 0.39 },
+        { "when": { "resolution": "2K" }, "amount": 0.58 },
+        { "when": { "resolution": "4K" }, "amount": 0.88 }
+      ]
+    }
+  },
+  {
+    "apiType": "image",
+    "provider": "evolink",
+    "modelId": "gemini-3-pro-image-preview",
+    "pricing": {
+      "mode": "capability",
+      "tiers": [
+        { "when": { "resolution": "1K" }, "amount": 0.87 },
+        { "when": { "resolution": "2K" }, "amount": 0.87 },
+        { "when": { "resolution": "4K" }, "amount": 1.39 }
+      ]
+    }
+  },
+  {
+    "apiType": "video",
+    "provider": "evolink",
+    "modelId": "kling-v3-image-to-video",
+    "pricing": {
+      "mode": "capability",
+      "tiers": [
+        { "when": { "quality": "720p", "sound": "off" }, "amount": 0.54 },
+        { "when": { "quality": "720p", "sound": "on" }, "amount": 0.81 },
+        { "when": { "quality": "1080p", "sound": "off" }, "amount": 0.72 },
+        { "when": { "quality": "1080p", "sound": "on" }, "amount": 1.08 }
+      ]
+    }
+  },
+  {
+    "apiType": "video",
+    "provider": "evolink",
+    "modelId": "kling-o3-image-to-video",
+    "pricing": {
+      "mode": "capability",
+      "tiers": [
+        { "when": { "quality": "720p", "sound": "off" }, "amount": 0.54 },
+        { "when": { "quality": "720p", "sound": "on" }, "amount": 0.72 },
+        { "when": { "quality": "1080p", "sound": "off" }, "amount": 0.72 },
+        { "when": { "quality": "1080p", "sound": "on" }, "amount": 0.90 }
+      ]
+    }
+  },
+  {
+    "apiType": "video",
+    "provider": "evolink",
+    "modelId": "wan2.6-image-to-video",
+    "pricing": {
+      "mode": "capability",
+      "tiers": [
+        { "when": { "quality": "720p" }, "amount": 0.51 },
+        { "when": { "quality": "1080p" }, "amount": 0.85 }
+      ]
+    }
+  },
+  {
+    "apiType": "video",
+    "provider": "evolink",
+    "modelId": "wan2.6-image-to-video-flash",
+    "pricing": {
+      "mode": "capability",
+      "tiers": [
+        { "when": { "quality": "720p", "generate_audio": false }, "amount": 0.13 },
+        { "when": { "quality": "720p", "generate_audio": true }, "amount": 0.26 },
+        { "when": { "quality": "1080p", "generate_audio": false }, "amount": 0.21 },
+        { "when": { "quality": "1080p", "generate_audio": true }, "amount": 0.43 }
+      ]
+    }
+  },
+  {
+    "apiType": "video",
+    "provider": "evolink",
+    "modelId": "seedance-1.5-pro",
+    "pricing": {
+      "mode": "capability",
+      "tiers": [
+        { "when": { "quality": "480p", "generate_audio": false }, "amount": 0.08 },
+        { "when": { "quality": "480p", "generate_audio": true }, "amount": 0.16 },
+        { "when": { "quality": "720p", "generate_audio": false }, "amount": 0.18 },
+        { "when": { "quality": "720p", "generate_audio": true }, "amount": 0.36 },
+        { "when": { "quality": "1080p", "generate_audio": false }, "amount": 0.40 },
+        { "when": { "quality": "1080p", "generate_audio": true }, "amount": 0.79 }
+      ]
+    }
   }
 ]
